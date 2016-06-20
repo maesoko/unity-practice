@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class OxChanger : MonoBehaviour {
+public class MarkHolder : MonoBehaviour {
 
 	private SpriteRenderer spriteRenderer;
 
-	public Sprite Ox {
+	public Sprite Mark {
 		get { return this.spriteRenderer.sprite; }
 		set { this.spriteRenderer.sprite = value; }
 	}
