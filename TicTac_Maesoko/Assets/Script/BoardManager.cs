@@ -7,6 +7,10 @@ public class BoardManager : MonoBehaviour {
 	private bool isPlayer1Turn;
 	private bool isGameRunning;
 
+	public const int EMPTY_CELL = 0;
+	public const int O_CELL = 1;
+	public const int X_CELL = 2;
+
 	public bool IsPlayer1Turn
 	{
 		get { return this.isPlayer1Turn; }
@@ -47,7 +51,6 @@ public class BoardManager : MonoBehaviour {
 
 		//ゲーム開始フラグを立てる
 		IsGameRunning = true;
-		
 	}
 
 	private void ResetMarks()
