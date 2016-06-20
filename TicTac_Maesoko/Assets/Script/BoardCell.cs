@@ -6,6 +6,7 @@ public class BoardCell : MonoBehaviour {
 	public Sprite spriteO;
 	public Sprite spriteX;
 
+	private BoardManager boardManager;
 	private OxChanger oxChanger;
 
 	//暫定的なプレイヤー判定フラグ
@@ -13,6 +14,7 @@ public class BoardCell : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		boardManager = gameObject.GetComponentInParent<BoardManager> ();
 		oxChanger = gameObject.GetComponentInChildren<OxChanger> ();
 	}
 	
@@ -23,10 +25,14 @@ public class BoardCell : MonoBehaviour {
 
 	//オブジェクト上で左クリックされたら呼び出される
 	void OnMouseDown() {
-		oxChanger.Ox = isPlayer ? spriteO : spriteX;
+		//クリックされたパネルのマルバツを変更する
+		ChangeOx(this.boardManager.IsPlayer1Turn);
+
+		//ターンフラグを反転させる
+		this.boardManager.InvertTurn ();
 	}
 
-	private void ChangeOx(bool isPlayer) {
-		this.oxChanger.Ox = isPlayer ? this.spriteO : this.spriteX;
+	private void ChangeOx(bool isPlayer1Turn) {
+		this.oxChanger.Ox = isPlayer1Turn ? this.spriteO : this.spriteX;
 	}
 }
