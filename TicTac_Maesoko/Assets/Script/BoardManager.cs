@@ -62,4 +62,28 @@ public class BoardManager : MonoBehaviour {
 			markHolder.Mark = null;
 		}
 	}
+
+	public int[] GetBoardAsInts()
+	{
+		int boardSize = boardCells.Length;
+		int[] cells = new int[boardSize];
+
+		for (int i = 0; i < boardSize; i++) 
+		{
+			switch (boardCells [i].CellState)
+			{
+			case BoardCell.CellStates.empty:
+				cells [i] = EMPTY_CELL;
+				break;
+			case BoardCell.CellStates.O:
+				cells [i] = O_CELL;
+				break;
+			case BoardCell.CellStates.X:
+				cells [i] = X_CELL;
+				break;
+			}
+		}
+
+		return cells;
+	}
 }
