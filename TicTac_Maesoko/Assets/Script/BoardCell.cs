@@ -9,9 +9,6 @@ public class BoardCell : MonoBehaviour {
 	private BoardManager boardManager;
 	private OxChanger oxChanger;
 
-	//暫定的なプレイヤー判定フラグ
-	public bool isPlayer = true;
-
 	// Use this for initialization
 	void Start () {
 		boardManager = gameObject.GetComponentInParent<BoardManager> ();
