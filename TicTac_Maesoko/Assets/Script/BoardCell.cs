@@ -25,6 +25,9 @@ public class BoardCell : MonoBehaviour {
 
 	//オブジェクト上で左クリックされたら呼び出される
 	void OnMouseDown() {
+		//既にマルバツが配置されていたら、反応させない
+		if (oxChanger.Ox != null) return;
+
 		//クリックされたパネルのマルバツを変更する
 		ChangeOx(this.boardManager.IsPlayer1Turn);
 
