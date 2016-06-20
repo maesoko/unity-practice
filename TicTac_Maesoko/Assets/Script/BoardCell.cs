@@ -3,8 +3,8 @@ using System.Collections;
 
 public class BoardCell : MonoBehaviour {
 
-	public Sprite spriteO;
-	public Sprite spriteX;
+	public Sprite player1Mark;
+	public Sprite player2Mark;
 
 	private BoardManager boardManager;
 	private MarkHolder markHolder;
@@ -22,10 +22,10 @@ public class BoardCell : MonoBehaviour {
 
 	//オブジェクト上で左クリックされたら呼び出される
 	void OnMouseDown() {
-		//既にマルバツが配置されていたら、反応させない
+		//既に記号が配置されていたら、反応させない
 		if (markHolder.Mark != null) return;
 
-		//クリックされたパネルのマルバツを変更する
+		//クリックされたパネルの記号を配置する
 		DeployMark(this.boardManager.IsPlayer1Turn);
 
 		//ターンフラグを反転させる
@@ -37,6 +37,6 @@ public class BoardCell : MonoBehaviour {
 	/// </summary>
 	/// <param name="isPlayer1Turn">If set to <c>true</c> is player1 turn.</param>
 	private void DeployMark(bool isPlayer1Turn) {
-		this.markHolder.Mark = isPlayer1Turn ? this.spriteO : this.spriteX;
+		this.markHolder.Mark = isPlayer1Turn ? this.player1Mark : this.player2Mark;
 	}
 }
