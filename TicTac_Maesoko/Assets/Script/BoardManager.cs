@@ -3,7 +3,9 @@ using System.Collections;
 
 public class BoardManager : MonoBehaviour {
 
+	private MarkHolder[] markHolders;
 	private bool isPlayer1Turn;
+	private bool isGameRunning;
 
 	public bool IsPlayer1Turn
 	{
@@ -11,18 +13,48 @@ public class BoardManager : MonoBehaviour {
 		set { this.isPlayer1Turn = value; }
 	}
 
+	public bool IsGameRunning
+	{
+		get { return this.isGameRunning; }
+		set { this.isGameRunning = value; }
+	}
+
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
 		IsPlayer1Turn = true;
+		markHolders = GetComponentsInChildren<MarkHolder> ();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 	
 	}
 
 	public void InvertTurn()
 	{
 		IsPlayer1Turn = !IsPlayer1Turn;
+	}
+
+	public void StartGame()
+	{
+		//ボード上の全ての記号をリセット
+		ResetMarks ();
+
+		//ターンフラグを元に戻す
+		IsPlayer1Turn = true;
+
+		//ゲーム開始フラグを立てる
+		IsGameRunning = true;
+		
+	}
+
+	private void ResetMarks()
+	{
+		foreach (MarkHolder markHolder in markHolders) 
+		{
+			markHolder.Mark = null;
+		}
 	}
 }
