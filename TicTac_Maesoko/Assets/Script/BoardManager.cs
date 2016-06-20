@@ -45,8 +45,8 @@ public class BoardManager : MonoBehaviour {
 
 	public void StartGame()
 	{
-		//ボード上の全ての記号をリセット
-		ResetMarks ();
+		//ボード上の全ての記号をクリア
+		ClearMarks ();
 
 		//ターンフラグを元に戻す
 		IsPlayer1Turn = true;
@@ -55,7 +55,7 @@ public class BoardManager : MonoBehaviour {
 		IsGameRunning = true;
 	}
 
-	private void ResetMarks()
+	private void ClearMarks()
 	{
 		foreach (MarkHolder markHolder in markHolders) 
 		{
