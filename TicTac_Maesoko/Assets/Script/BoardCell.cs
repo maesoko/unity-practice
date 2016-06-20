@@ -7,12 +7,12 @@ public class BoardCell : MonoBehaviour {
 	public Sprite spriteX;
 
 	private BoardManager boardManager;
-	private OxChanger oxChanger;
+	private MarkHolder markHolder;
 
 	// Use this for initialization
 	void Start () {
 		boardManager = gameObject.GetComponentInParent<BoardManager> ();
-		oxChanger = gameObject.GetComponentInChildren<OxChanger> ();
+		markHolder = gameObject.GetComponentInChildren<MarkHolder> ();
 	}
 	
 	// Update is called once per frame
@@ -23,7 +23,7 @@ public class BoardCell : MonoBehaviour {
 	//オブジェクト上で左クリックされたら呼び出される
 	void OnMouseDown() {
 		//既にマルバツが配置されていたら、反応させない
-		if (oxChanger.Ox != null) return;
+		if (markHolder.Mark != null) return;
 
 		//クリックされたパネルのマルバツを変更する
 		DeployMark(this.boardManager.IsPlayer1Turn);
@@ -37,6 +37,6 @@ public class BoardCell : MonoBehaviour {
 	/// </summary>
 	/// <param name="isPlayer1Turn">If set to <c>true</c> is player1 turn.</param>
 	private void DeployMark(bool isPlayer1Turn) {
-		this.oxChanger.Ox = isPlayer1Turn ? this.spriteO : this.spriteX;
+		this.markHolder.Mark = isPlayer1Turn ? this.spriteO : this.spriteX;
 	}
 }
