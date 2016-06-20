@@ -26,13 +26,17 @@ public class BoardCell : MonoBehaviour {
 		if (oxChanger.Ox != null) return;
 
 		//クリックされたパネルのマルバツを変更する
-		ChangeOx(this.boardManager.IsPlayer1Turn);
+		DeployMark(this.boardManager.IsPlayer1Turn);
 
 		//ターンフラグを反転させる
 		this.boardManager.InvertTurn ();
 	}
 
-	private void ChangeOx(bool isPlayer1Turn) {
+	/// <summary>
+	/// Deploys the mark.
+	/// </summary>
+	/// <param name="isPlayer1Turn">If set to <c>true</c> is player1 turn.</param>
+	private void DeployMark(bool isPlayer1Turn) {
 		this.oxChanger.Ox = isPlayer1Turn ? this.spriteO : this.spriteX;
 	}
 }
