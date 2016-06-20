@@ -8,12 +8,19 @@ public class BoardCell : MonoBehaviour {
 
 	private BoardManager boardManager;
 	private MarkHolder markHolder;
-	private int cellState;
+	private CellStates cellState;
 
-	public int CellState
+	public CellStates CellState
 	{
 		get { return this.cellState; }
 		set { this.cellState = value; }
+	}
+
+	public enum CellStates
+	{
+		empty,
+		O,
+		X
 	}
 
 	// Use this for initialization
@@ -21,7 +28,7 @@ public class BoardCell : MonoBehaviour {
 	{
 		boardManager = gameObject.GetComponentInParent<BoardManager> ();
 		markHolder = gameObject.GetComponentInChildren<MarkHolder> ();
-		cellState = BoardManager.EMPTY_CELL;
+		cellState = CellStates.empty;
 	}
 	
 	// Update is called once per frame
@@ -52,12 +59,12 @@ public class BoardCell : MonoBehaviour {
 		if (isPlayer1Turn)
 		{
 			this.markHolder.Mark = this.player1Mark;
-			this.CellState = BoardManager.O_CELL;
+			this.CellState = CellStates.O;
 		}
 		else
 		{
 			this.markHolder.Mark = this.player2Mark;
-			this.CellState = BoardManager.X_CELL;
+			this.CellState = CellStates.X;
 		}
 	}
 }
