@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class BoardManager : MonoBehaviour {
 
@@ -7,6 +8,9 @@ public class BoardManager : MonoBehaviour {
 	private MarkHolder[] markHolders;
 	private bool isPlayer1Turn;
 	private bool isGameRunning;
+	public GameObject player1Win;
+	public GameObject player2Win;
+	public GameObject draw;
 
 	public const int EMPTY_CELL = 0;
 	public const int O_CELL = 1;
@@ -46,6 +50,9 @@ public class BoardManager : MonoBehaviour {
 
 	public void StartGame()
 	{
+		//ゲーム結果をクリアする
+		ClearResult();
+
 		//ボード上の全ての記号をクリア
 		ClearBoard ();
 
@@ -54,6 +61,19 @@ public class BoardManager : MonoBehaviour {
 
 		//ゲーム開始フラグを立てる
 		IsGameRunning = true;
+
+	}
+
+	public void FinishGame()
+	{
+		IsGameRunning = false;
+	}
+
+	private void ClearResult()
+	{
+		this.player1Win.SetActive (false);
+		this.player2Win.SetActive (false);
+		this.draw.SetActive (false);
 	}
 
 	private void ClearBoard()
@@ -62,20 +82,24 @@ public class BoardManager : MonoBehaviour {
 		{
 			markHolder.Mark = null;
 		}
+
+		foreach (BoardCell cell in boardCells)
+		{
+			cell.CellState = BoardCell.CellStates.empty;
+		}
 	}
 
-	public int[,] GetBoardAsInts()
+	public int[][] GetBoardAsInts()
 	{
-		int[,] cells = new int[BOARD_HEIGHT, BOARD_WIDTH];
+		int[][] cells = new int[BOARD_HEIGHT][];
 		int cellCount = 0;
-		int height = cells.GetLength (0);
-		int width = cells.GetLength (1);
 
-		for (int i = 0; i < height; i++)
+		for (int i = 0; i < cells.Length; i++)
 		{
-			for (int j = 0; j < width; j++) 
+			cells[i] = new int[BOARD_WIDTH];
+			for (int j = 0; j < cells[i].Length; j++) 
 			{
-				cells [i, j] = CellStateToInt (boardCells [cellCount++].CellState);
+				cells [i][j] = CellStateToInt(boardCells [cellCount++].CellState);
 			}
 		}
 
@@ -95,6 +119,44 @@ public class BoardManager : MonoBehaviour {
 		default:
 			return -1;
 		}
+	}
+
+	public void Judge(BoardCell.CellStates target)
+	{
+		int[][] board = GetBoardAsInts ();
+
+		if (JudgeHorizon (target, board)) {
+			ShowWinner ();
+		}
+	}
+
+	private bool JudgeHorizon(BoardCell.CellStates target, int[][] board)
+	{
+		for (int i = 0; i < board.Length; i++)
+		{
+			if (isWin (target, board [i])) return true;
+		}
+
+		return false;
+	}
+
+	private bool isWin(BoardCell.CellStates target, int[] stateAry)
+	{
+		return stateAry.All (state => state == CellStateToInt(target));
+	}
+
+	private void ShowWinner()
+	{
+		if (IsPlayer1Turn)
+		{
+			player1Win.SetActive (true);
+		}
+		else
+		{
+			player2Win.SetActive (true);
+		}
+
+		FinishGame ();
 	}
 
 }

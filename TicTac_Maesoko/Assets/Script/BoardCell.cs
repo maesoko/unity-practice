@@ -46,6 +46,9 @@ public class BoardCell : MonoBehaviour {
 		//クリックされたパネルの記号を配置する
 		DeployMark(this.boardManager.IsPlayer1Turn);
 
+		//勝敗の判定
+		boardManager.Judge (CellState);
+
 		//ターンフラグを反転させる
 		this.boardManager.InvertTurn ();
 	}
