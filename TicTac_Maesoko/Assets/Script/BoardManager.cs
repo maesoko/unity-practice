@@ -1,17 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class BoardManager : MonoBehaviour {
 
+	public BoardCell[] boardCells;
 	private MarkHolder[] markHolders;
 	private bool isPlayer1Turn;
 	private bool isGameRunning;
-
-	public BoardCell[] boardCells;
+	public GameObject player1Win;
+	public GameObject player2Win;
+	public GameObject draw;
 
 	public const int EMPTY_CELL = 0;
 	public const int O_CELL = 1;
 	public const int X_CELL = 2;
+	public const int BOARD_WIDTH = 3;
+	public const int BOARD_HEIGHT = 3;
 
 	public bool IsPlayer1Turn
 	{
@@ -45,6 +50,9 @@ public class BoardManager : MonoBehaviour {
 
 	public void StartGame()
 	{
+		//ゲーム結果をクリアする
+		ClearResult();
+
 		//ボード上の全ての記号をクリア
 		ClearBoard ();
 
@@ -55,35 +63,117 @@ public class BoardManager : MonoBehaviour {
 		IsGameRunning = true;
 	}
 
+	public void FinishGame()
+	{
+		IsGameRunning = false;
+	}
+
+	private void ClearResult()
+	{
+		this.player1Win.SetActive (false);
+		this.player2Win.SetActive (false);
+		this.draw.SetActive (false);
+	}
+
 	private void ClearBoard()
 	{
-		foreach (MarkHolder markHolder in markHolders) 
+		foreach (BoardCell cell in boardCells)
 		{
-			markHolder.Mark = null;
+			cell.Initialize ();
 		}
 	}
 
-	public int[] GetBoardAsInts()
+	public int[][] GetBoardAsInts()
 	{
-		int boardSize = boardCells.Length;
-		int[] cells = new int[boardSize];
+		int[][] cells = new int[BOARD_HEIGHT][];
+		int cellCount = 0;
 
-		for (int i = 0; i < boardSize; i++) 
+		for (int i = 0; i < cells.Length; i++)
 		{
-			switch (boardCells [i].CellState)
+			cells[i] = new int[BOARD_WIDTH];
+			for (int j = 0; j < cells[i].Length; j++) 
 			{
-			case BoardCell.CellStates.empty:
-				cells [i] = EMPTY_CELL;
-				break;
-			case BoardCell.CellStates.O:
-				cells [i] = O_CELL;
-				break;
-			case BoardCell.CellStates.X:
-				cells [i] = X_CELL;
-				break;
+				cells [i][j] = CellStateToInt(boardCells [cellCount++].CellState);
 			}
 		}
 
 		return cells;
+	}
+
+	private int CellStateToInt(BoardCell.CellStates state)
+	{
+		switch (state) 
+		{
+		case BoardCell.CellStates.empty:
+			return EMPTY_CELL;
+		case BoardCell.CellStates.O:
+			return O_CELL;
+		case BoardCell.CellStates.X:
+			return X_CELL;
+		default:
+			return -1;
+		}
+	}
+
+	public void Judge(BoardCell.CellStates target)
+	{
+		int[][] board = GetBoardAsInts ();
+
+		if (JudgeHorizon (target, board)) {
+			ShowWinner ();
+		}
+		else if (IsDraw(board))
+		{
+			showDraw ();
+		}
+	}
+
+	private bool JudgeHorizon(BoardCell.CellStates target, int[][] board)
+	{
+		for (int i = 0; i < board.Length; i++)
+		{
+			if (isWin (target, board [i])) return true;
+		}
+
+		return false;
+	}
+
+	private bool isWin(BoardCell.CellStates target, int[] stateAry)
+	{
+		return stateAry.All (state => state == CellStateToInt(target));
+	}
+
+	private void ShowWinner()
+	{
+		if (IsPlayer1Turn)
+		{
+			player1Win.SetActive (true);
+		}
+		else
+		{
+			player2Win.SetActive (true);
+		}
+
+		FinishGame ();
+	}
+
+	private void showDraw()
+	{
+		draw.SetActive (true);
+		FinishGame ();
+	}
+
+	private bool IsDraw(int[][] board)
+	{
+		return GetEmptyCellCount(board) == 0;
+	}
+
+	private int GetEmptyCellCount(int[][] board)
+	{
+		return board
+			.SelectMany (ary => ary)
+			.ToList()
+			.FindAll (i => i == EMPTY_CELL)
+			.Count ();
 	}
 }

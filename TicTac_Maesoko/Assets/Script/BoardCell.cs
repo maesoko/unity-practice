@@ -37,6 +37,12 @@ public class BoardCell : MonoBehaviour {
 
 	}
 
+	public void Initialize()
+	{
+		markHolder.Mark = null;
+		CellState = CellStates.empty;
+	}
+
 	//オブジェクト上で左クリックされたら呼び出される
 	void OnMouseDown()
 	{
@@ -45,6 +51,9 @@ public class BoardCell : MonoBehaviour {
 
 		//クリックされたパネルの記号を配置する
 		DeployMark(this.boardManager.IsPlayer1Turn);
+
+		//勝敗の判定
+		boardManager.Judge (CellState);
 
 		//ターンフラグを反転させる
 		this.boardManager.InvertTurn ();
