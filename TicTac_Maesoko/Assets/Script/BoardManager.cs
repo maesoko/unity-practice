@@ -3,15 +3,16 @@ using System.Collections;
 
 public class BoardManager : MonoBehaviour {
 
+	public BoardCell[] boardCells;
 	private MarkHolder[] markHolders;
 	private bool isPlayer1Turn;
 	private bool isGameRunning;
 
-	public BoardCell[] boardCells;
-
 	public const int EMPTY_CELL = 0;
 	public const int O_CELL = 1;
 	public const int X_CELL = 2;
+	public const int BOARD_WIDTH = 3;
+	public const int BOARD_HEIGHT = 3;
 
 	public bool IsPlayer1Turn
 	{
@@ -63,27 +64,37 @@ public class BoardManager : MonoBehaviour {
 		}
 	}
 
-	public int[] GetBoardAsInts()
+	public int[,] GetBoardAsInts()
 	{
-		int boardSize = boardCells.Length;
-		int[] cells = new int[boardSize];
+		int[,] cells = new int[BOARD_HEIGHT, BOARD_WIDTH];
+		int cellCount = 0;
+		int height = cells.GetLength (0);
+		int width = cells.GetLength (1);
 
-		for (int i = 0; i < boardSize; i++) 
+		for (int i = 0; i < height; i++)
 		{
-			switch (boardCells [i].CellState)
+			for (int j = 0; j < width; j++) 
 			{
-			case BoardCell.CellStates.empty:
-				cells [i] = EMPTY_CELL;
-				break;
-			case BoardCell.CellStates.O:
-				cells [i] = O_CELL;
-				break;
-			case BoardCell.CellStates.X:
-				cells [i] = X_CELL;
-				break;
+				cells [i, j] = CellStateToInt (boardCells [cellCount++].CellState);
 			}
 		}
 
 		return cells;
 	}
+
+	private int CellStateToInt(BoardCell.CellStates state)
+	{
+		switch (state) 
+		{
+		case BoardCell.CellStates.empty:
+			return EMPTY_CELL;
+		case BoardCell.CellStates.O:
+			return O_CELL;
+		case BoardCell.CellStates.X:
+			return X_CELL;
+		default:
+			return -1;
+		}
+	}
+
 }
