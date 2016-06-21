@@ -61,7 +61,6 @@ public class BoardManager : MonoBehaviour {
 
 		//ゲーム開始フラグを立てる
 		IsGameRunning = true;
-
 	}
 
 	public void FinishGame()
@@ -123,6 +122,10 @@ public class BoardManager : MonoBehaviour {
 		if (JudgeHorizon (target, board)) {
 			ShowWinner ();
 		}
+		else if (IsDraw(board))
+		{
+			showDraw ();
+		}
 	}
 
 	private bool JudgeHorizon(BoardCell.CellStates target, int[][] board)
@@ -154,4 +157,23 @@ public class BoardManager : MonoBehaviour {
 		FinishGame ();
 	}
 
+	private void showDraw()
+	{
+		draw.SetActive (true);
+		FinishGame ();
+	}
+
+	private bool IsDraw(int[][] board)
+	{
+		return GetEmptyCellCount(board) == 0;
+	}
+
+	private int GetEmptyCellCount(int[][] board)
+	{
+		return board
+			.SelectMany (ary => ary)
+			.ToList()
+			.FindAll (i => i == EMPTY_CELL)
+			.Count ();
+	}
 }
