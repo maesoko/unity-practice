@@ -37,6 +37,12 @@ public class BoardCell : MonoBehaviour {
 
 	}
 
+	public void Initialize()
+	{
+		markHolder.Mark = null;
+		CellState = CellStates.empty;
+	}
+
 	//オブジェクト上で左クリックされたら呼び出される
 	void OnMouseDown()
 	{

@@ -78,14 +78,9 @@ public class BoardManager : MonoBehaviour {
 
 	private void ClearBoard()
 	{
-		foreach (MarkHolder markHolder in markHolders) 
-		{
-			markHolder.Mark = null;
-		}
-
 		foreach (BoardCell cell in boardCells)
 		{
-			cell.CellState = BoardCell.CellStates.empty;
+			cell.Initialize ();
 		}
 	}
 
