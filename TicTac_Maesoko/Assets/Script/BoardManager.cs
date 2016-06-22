@@ -105,7 +105,8 @@ public class BoardManager : MonoBehaviour {
 	{
 		int[][] board = GetBoardAsInts ();
 
-		if (JudgeHorizon(target, board) || JudgeVertical(target, board))
+		if (JudgeHorizon(target, board) || JudgeVertical(target, board) ||
+			JudgeLeftAngle(target, board))
 		{
 			ShowWinner ();
 		}
@@ -140,6 +141,36 @@ public class BoardManager : MonoBehaviour {
 		}
 
 		return false;
+	}
+
+	private bool JudgeLeftAngle(BoardCell.CellStates target, int[][] board)
+	{
+		bool[,] isLeftAngleCells = 
+		{
+			{true, false, false},
+			{false, true, false},
+			{false, false, true}
+		};
+		int[] leftAngleAry = GetObliqueCellAry(board, isLeftAngleCells);
+
+		return isWin(target, leftAngleAry);
+	}
+
+	private int[] GetObliqueCellAry(int[][] board, bool[,] isObliqueCells)
+	{
+		int[] obliqueCellAry = new int[board.Length];
+
+		for (int i = 0; i < board.Length; i++)
+		{
+			for(int j = 0; j < board[i].Length; j++)
+			{
+				if (isObliqueCells[i, j]) {
+					obliqueCellAry[i] = board[i][j];
+				}
+			}
+		}
+
+		return obliqueCellAry;
 	}
 
 	private bool isWin(BoardCell.CellStates target, int[] stateAry)
