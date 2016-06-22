@@ -15,9 +15,4 @@ public class MarkHolder : MonoBehaviour {
 		spriteRenderer = gameObject.GetComponent<SpriteRenderer> ();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
 }

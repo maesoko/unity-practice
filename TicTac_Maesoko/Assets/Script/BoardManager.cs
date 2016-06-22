@@ -4,19 +4,20 @@ using System.Linq;
 
 public class BoardManager : MonoBehaviour {
 
-	public BoardCell[] boardCells;
-	private MarkHolder[] markHolders;
-	private bool isPlayer1Turn;
-	private bool isGameRunning;
-	public GameObject player1Win;
-	public GameObject player2Win;
-	public GameObject draw;
-
 	public const int EMPTY_CELL = 0;
 	public const int O_CELL = 1;
 	public const int X_CELL = 2;
 	public const int BOARD_WIDTH = 3;
 	public const int BOARD_HEIGHT = 3;
+
+	private bool isPlayer1Turn;
+	private bool isGameRunning;
+	private JudgeManager judgeMgr;
+	
+	public BoardCell[] boardCells;
+	public GameObject player1Win;
+	public GameObject player2Win;
+	public GameObject draw;
 
 	public bool IsPlayer1Turn
 	{
@@ -30,22 +31,14 @@ public class BoardManager : MonoBehaviour {
 		set { this.isGameRunning = value; }
 	}
 
-	// Use this for initialization
-	void Start ()
-	{
-		IsPlayer1Turn = true;
-		markHolders = GetComponentsInChildren<MarkHolder> ();
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
-	}
-
 	public void InvertTurn()
 	{
 		IsPlayer1Turn = !IsPlayer1Turn;
+	}
+
+	void Start()
+	{
+		this.judgeMgr = new JudgeManager ();
 	}
 
 	public void StartGame()
@@ -85,62 +78,33 @@ public class BoardManager : MonoBehaviour {
 
 	public int[][] GetBoardAsInts()
 	{
-		int[][] cells = new int[BOARD_HEIGHT][];
+		int[][] board = new int[BOARD_HEIGHT][];
 		int cellCount = 0;
 
-		for (int i = 0; i < cells.Length; i++)
+		for (int i = 0; i < board.Length; i++)
 		{
-			cells[i] = new int[BOARD_WIDTH];
-			for (int j = 0; j < cells[i].Length; j++) 
+			board[i] = new int[BOARD_WIDTH];
+			for (int j = 0; j < board[i].Length; j++) 
 			{
-				cells [i][j] = CellStateToInt(boardCells [cellCount++].CellState);
+				board [i][j] = CellStateToInt(boardCells [cellCount++].CellState);
 			}
 		}
 
-		return cells;
+		return board;
 	}
 
-	private int CellStateToInt(BoardCell.CellStates state)
-	{
-		switch (state) 
-		{
-		case BoardCell.CellStates.empty:
-			return EMPTY_CELL;
-		case BoardCell.CellStates.O:
-			return O_CELL;
-		case BoardCell.CellStates.X:
-			return X_CELL;
-		default:
-			return -1;
-		}
-	}
-
-	public void Judge(BoardCell.CellStates target)
+	public void Judge(CellStates target)
 	{
 		int[][] board = GetBoardAsInts ();
 
-		if (JudgeHorizon (target, board)) {
+		if (judgeMgr.Judge(target, board))
+		{
 			ShowWinner ();
 		}
-		else if (IsDraw(board))
+		else if (judgeMgr.IsDraw(board))
 		{
 			showDraw ();
 		}
-	}
-
-	private bool JudgeHorizon(BoardCell.CellStates target, int[][] board)
-	{
-		for (int i = 0; i < board.Length; i++)
-		{
-			if (isWin (target, board [i])) return true;
-		}
-
-		return false;
-	}
-
-	private bool isWin(BoardCell.CellStates target, int[] stateAry)
-	{
-		return stateAry.All (state => state == CellStateToInt(target));
 	}
 
 	private void ShowWinner()
@@ -163,17 +127,19 @@ public class BoardManager : MonoBehaviour {
 		FinishGame ();
 	}
 
-	private bool IsDraw(int[][] board)
+	public static int CellStateToInt(CellStates state)
 	{
-		return GetEmptyCellCount(board) == 0;
+		switch (state) 
+		{
+		case CellStates.empty:
+			return EMPTY_CELL;
+		case CellStates.O:
+			return O_CELL;
+		case CellStates.X:
+			return X_CELL;
+		default:
+			return -1;
+		}
 	}
 
-	private int GetEmptyCellCount(int[][] board)
-	{
-		return board
-			.SelectMany (ary => ary)
-			.ToList()
-			.FindAll (i => i == EMPTY_CELL)
-			.Count ();
-	}
 }

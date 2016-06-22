@@ -16,13 +16,6 @@ public class BoardCell : MonoBehaviour {
 		set { this.cellState = value; }
 	}
 
-	public enum CellStates
-	{
-		empty,
-		O,
-		X
-	}
-
 	// Use this for initialization
 	void Start ()
 	{
@@ -31,12 +24,6 @@ public class BoardCell : MonoBehaviour {
 		cellState = CellStates.empty;
 	}
 	
-	// Update is called once per frame
-	void Update ()
-	{
-
-	}
-
 	public void Initialize()
 	{
 		markHolder.Mark = null;
@@ -50,13 +37,13 @@ public class BoardCell : MonoBehaviour {
 		if (!boardManager.IsGameRunning || markHolder.Mark != null) return;
 
 		//クリックされたパネルの記号を配置する
-		DeployMark(this.boardManager.IsPlayer1Turn);
+		DeployMark(boardManager.IsPlayer1Turn);
 
 		//勝敗の判定
 		boardManager.Judge (CellState);
 
 		//ターンフラグを反転させる
-		this.boardManager.InvertTurn ();
+		boardManager.InvertTurn ();
 	}
 
 	/// <summary>
