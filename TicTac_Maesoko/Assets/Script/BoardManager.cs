@@ -5,7 +5,6 @@ using System.Linq;
 public class BoardManager : MonoBehaviour {
 
 	public BoardCell[] boardCells;
-	private MarkHolder[] markHolders;
 	private bool isPlayer1Turn;
 	private bool isGameRunning;
 	public GameObject player1Win;
@@ -34,7 +33,6 @@ public class BoardManager : MonoBehaviour {
 	void Start ()
 	{
 		IsPlayer1Turn = true;
-		markHolders = GetComponentsInChildren<MarkHolder> ();
 	}
 	
 	// Update is called once per frame
