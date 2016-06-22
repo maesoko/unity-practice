@@ -145,10 +145,10 @@ public class BoardManager : MonoBehaviour {
 
 	private bool JudgeOblique(BoardCell.CellStates target, int[][] board)
 	{
-		return JudgeLeftAngle (target, board) || JudgeRightAngle (target, board);
+		return JudgeLeftOblique (target, board) || JudgeRightOblique (target, board);
 	}
 
-	private bool JudgeLeftAngle(BoardCell.CellStates target, int[][] board)
+	private bool JudgeLeftOblique(BoardCell.CellStates target, int[][] board)
 	{
 		bool[,] isLeftAngleCells = 
 		{
@@ -161,7 +161,7 @@ public class BoardManager : MonoBehaviour {
 		return isWin(target, leftAngleAry);
 	}
 
-	private bool JudgeRightAngle(BoardCell.CellStates target, int[][] board)
+	private bool JudgeRightOblique(BoardCell.CellStates target, int[][] board)
 	{
 		bool[,] isRightAngleCells = 
 		{
