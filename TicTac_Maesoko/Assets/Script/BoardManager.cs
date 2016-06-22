@@ -93,7 +93,7 @@ public class BoardManager : MonoBehaviour {
 		return board;
 	}
 
-	public void Judge(BoardCell.CellStates target)
+	public void Judge(CellStates target)
 	{
 		int[][] board = GetBoardAsInts ();
 
@@ -127,15 +127,15 @@ public class BoardManager : MonoBehaviour {
 		FinishGame ();
 	}
 
-	public static int CellStateToInt(BoardCell.CellStates state)
+	public static int CellStateToInt(CellStates state)
 	{
 		switch (state) 
 		{
-		case BoardCell.CellStates.empty:
+		case CellStates.empty:
 			return EMPTY_CELL;
-		case BoardCell.CellStates.O:
+		case CellStates.O:
 			return O_CELL;
-		case BoardCell.CellStates.X:
+		case CellStates.X:
 			return X_CELL;
 		default:
 			return -1;

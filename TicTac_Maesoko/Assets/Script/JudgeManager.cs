@@ -4,7 +4,7 @@ using System.Linq;
 
 public class JudgeManager {
 
-	public bool Judge(BoardCell.CellStates target, int[][] board)
+	public bool Judge(CellStates target, int[][] board)
 	{
 		return JudgeHorizon (target, board) ||
 			JudgeVertical (target, board) ||
@@ -16,7 +16,7 @@ public class JudgeManager {
 		return GetEmptyCellCount(board) == 0;
 	}
 
-	private bool JudgeHorizon(BoardCell.CellStates target, int[][] board)
+	private bool JudgeHorizon(CellStates target, int[][] board)
 	{
 		for (int i = 0; i < board.Length; i++)
 		{
@@ -26,7 +26,7 @@ public class JudgeManager {
 		return false;
 	}
 
-	private bool JudgeVertical(BoardCell.CellStates target, int[][] board)
+	private bool JudgeVertical(CellStates target, int[][] board)
 	{
 		int[] verticalAry = new int[board.Length];
 
@@ -43,12 +43,12 @@ public class JudgeManager {
 		return false;
 	}
 
-	private bool JudgeOblique(BoardCell.CellStates target, int[][] board)
+	private bool JudgeOblique(CellStates target, int[][] board)
 	{
 		return JudgeLeftOblique (target, board) || JudgeRightOblique (target, board);
 	}
 
-	private bool JudgeLeftOblique(BoardCell.CellStates target, int[][] board)
+	private bool JudgeLeftOblique(CellStates target, int[][] board)
 	{
 		bool[,] isLeftAngleCells = 
 		{
@@ -61,7 +61,7 @@ public class JudgeManager {
 		return isWin(target, leftAngleAry);
 	}
 
-	private bool JudgeRightOblique(BoardCell.CellStates target, int[][] board)
+	private bool JudgeRightOblique(CellStates target, int[][] board)
 	{
 		bool[,] isRightAngleCells = 
 		{
@@ -91,7 +91,7 @@ public class JudgeManager {
 		return obliqueCellAry;
 	}
 
-	private bool isWin(BoardCell.CellStates target, int[] stateAry)
+	private bool isWin(CellStates target, int[] stateAry)
 	{
 		return stateAry.All (state => state == BoardManager.CellStateToInt(target));
 	}

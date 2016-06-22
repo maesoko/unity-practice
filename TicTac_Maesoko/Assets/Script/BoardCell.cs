@@ -16,13 +16,6 @@ public class BoardCell : MonoBehaviour {
 		set { this.cellState = value; }
 	}
 
-	public enum CellStates
-	{
-		empty,
-		O,
-		X
-	}
-
 	// Use this for initialization
 	void Start ()
 	{
