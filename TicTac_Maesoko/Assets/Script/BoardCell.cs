@@ -31,12 +31,6 @@ public class BoardCell : MonoBehaviour {
 		cellState = CellStates.empty;
 	}
 	
-	// Update is called once per frame
-	void Update ()
-	{
-
-	}
-
 	public void Initialize()
 	{
 		markHolder.Mark = null;
