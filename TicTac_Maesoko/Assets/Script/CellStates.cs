@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public enum CellStates {
+﻿public enum CellStates {
 	empty,
 	O,
 	X
