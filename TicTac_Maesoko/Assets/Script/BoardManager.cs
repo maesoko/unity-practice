@@ -17,6 +17,7 @@ public class BoardManager : MonoBehaviour {
 	public GameObject player1Win;
 	public GameObject player2Win;
 	public GameObject draw;
+	public MarkChanger markChanger;
 
 	public bool IsPlayer1Turn
 	{
@@ -33,6 +34,7 @@ public class BoardManager : MonoBehaviour {
 	public void InvertTurn()
 	{
 		IsPlayer1Turn = !IsPlayer1Turn;
+		markChanger.ChangeTurnMark (IsPlayer1Turn);
 	}
 
 	void Start()
