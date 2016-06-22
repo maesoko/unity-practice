@@ -44,13 +44,13 @@ public class BoardCell : MonoBehaviour {
 		if (!boardManager.IsGameRunning || markHolder.Mark != null) return;
 
 		//クリックされたパネルの記号を配置する
-		DeployMark(this.boardManager.IsPlayer1Turn);
+		DeployMark(boardManager.IsPlayer1Turn);
 
 		//勝敗の判定
 		boardManager.Judge (CellState);
 
 		//ターンフラグを反転させる
-		this.boardManager.InvertTurn ();
+		boardManager.InvertTurn ();
 	}
 
 	/// <summary>
