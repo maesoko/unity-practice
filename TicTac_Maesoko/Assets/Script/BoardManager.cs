@@ -29,18 +29,6 @@ public class BoardManager : MonoBehaviour {
 		set { this.isGameRunning = value; }
 	}
 
-	// Use this for initialization
-	void Start ()
-	{
-		IsPlayer1Turn = true;
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
-	}
-
 	public void InvertTurn()
 	{
 		IsPlayer1Turn = !IsPlayer1Turn;
@@ -117,7 +105,8 @@ public class BoardManager : MonoBehaviour {
 	{
 		int[][] board = GetBoardAsInts ();
 
-		if (JudgeHorizon (target, board)) {
+		if (JudgeHorizon(target, board) || JudgeVertical(target, board))
+		{
 			ShowWinner ();
 		}
 		else if (IsDraw(board))
@@ -131,6 +120,23 @@ public class BoardManager : MonoBehaviour {
 		for (int i = 0; i < board.Length; i++)
 		{
 			if (isWin (target, board [i])) return true;
+		}
+
+		return false;
+	}
+
+	private bool JudgeVertical(BoardCell.CellStates target, int[][] board)
+	{
+		int[] verticalAry = new int[BOARD_HEIGHT];
+
+		for (int i = 0; i < board.Length; i++)
+		{
+			for (int j = 0; j < board [i].Length; j++)
+			{
+				verticalAry [j] = board [j] [i];
+			}
+
+			if (isWin (target, verticalAry)) return true;
 		}
 
 		return false;
