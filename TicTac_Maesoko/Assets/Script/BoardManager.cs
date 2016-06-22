@@ -4,18 +4,20 @@ using System.Linq;
 
 public class BoardManager : MonoBehaviour {
 
-	public BoardCell[] boardCells;
-	private bool isPlayer1Turn;
-	private bool isGameRunning;
-	public GameObject player1Win;
-	public GameObject player2Win;
-	public GameObject draw;
-
 	public const int EMPTY_CELL = 0;
 	public const int O_CELL = 1;
 	public const int X_CELL = 2;
 	public const int BOARD_WIDTH = 3;
 	public const int BOARD_HEIGHT = 3;
+
+	private bool isPlayer1Turn;
+	private bool isGameRunning;
+	private JudgeManager judgeMgr;
+	
+	public BoardCell[] boardCells;
+	public GameObject player1Win;
+	public GameObject player2Win;
+	public GameObject draw;
 
 	public bool IsPlayer1Turn
 	{
@@ -32,6 +34,11 @@ public class BoardManager : MonoBehaviour {
 	public void InvertTurn()
 	{
 		IsPlayer1Turn = !IsPlayer1Turn;
+	}
+
+	void Start()
+	{
+		this.judgeMgr = new JudgeManager ();
 	}
 
 	public void StartGame()
@@ -86,114 +93,18 @@ public class BoardManager : MonoBehaviour {
 		return cells;
 	}
 
-	private int CellStateToInt(BoardCell.CellStates state)
-	{
-		switch (state) 
-		{
-		case BoardCell.CellStates.empty:
-			return EMPTY_CELL;
-		case BoardCell.CellStates.O:
-			return O_CELL;
-		case BoardCell.CellStates.X:
-			return X_CELL;
-		default:
-			return -1;
-		}
-	}
-
 	public void Judge(BoardCell.CellStates target)
 	{
 		int[][] board = GetBoardAsInts ();
 
-		if (JudgeHorizon(target, board) || JudgeVertical(target, board) ||
-			JudgeOblique(target, board))
+		if (judgeMgr.Judge(target, board))
 		{
 			ShowWinner ();
 		}
-		else if (IsDraw(board))
+		else if (judgeMgr.IsDraw(board))
 		{
 			showDraw ();
 		}
-	}
-
-	private bool JudgeHorizon(BoardCell.CellStates target, int[][] board)
-	{
-		for (int i = 0; i < board.Length; i++)
-		{
-			if (isWin (target, board [i])) return true;
-		}
-
-		return false;
-	}
-
-	private bool JudgeVertical(BoardCell.CellStates target, int[][] board)
-	{
-		int[] verticalAry = new int[BOARD_HEIGHT];
-
-		for (int i = 0; i < board.Length; i++)
-		{
-			for (int j = 0; j < board [i].Length; j++)
-			{
-				verticalAry [j] = board [j] [i];
-			}
-
-			if (isWin (target, verticalAry)) return true;
-		}
-
-		return false;
-	}
-
-	private bool JudgeOblique(BoardCell.CellStates target, int[][] board)
-	{
-		return JudgeLeftOblique (target, board) || JudgeRightOblique (target, board);
-	}
-
-	private bool JudgeLeftOblique(BoardCell.CellStates target, int[][] board)
-	{
-		bool[,] isLeftAngleCells = 
-		{
-			{true, false, false},
-			{false, true, false},
-			{false, false, true}
-		};
-		int[] leftAngleAry = GetObliqueCellAry(board, isLeftAngleCells);
-
-		return isWin(target, leftAngleAry);
-	}
-
-	private bool JudgeRightOblique(BoardCell.CellStates target, int[][] board)
-	{
-		bool[,] isRightAngleCells = 
-		{
-			{false, false, true},
-			{false, true, false},
-			{true, false, false}
-		};
-		int[] rightAngleAry = GetObliqueCellAry(board, isRightAngleCells);
-
-		return isWin(target, rightAngleAry);
-	}
-
-	private int[] GetObliqueCellAry(int[][] board, bool[,] isObliqueCells)
-	{
-		int[] obliqueCellAry = new int[board.Length];
-
-		for (int i = 0; i < board.Length; i++)
-		{
-			for(int j = 0; j < board[i].Length; j++)
-			{
-				if (isObliqueCells[i, j]) {
-					obliqueCellAry[i] = board[i][j];
-				}
-			}
-		}
-
-		return obliqueCellAry;
-	}
-
-	private bool isWin(BoardCell.CellStates target, int[] stateAry)
-	{
-		return stateAry.All (state => state == CellStateToInt(target));
 	}
 
 	private void ShowWinner()
@@ -216,17 +127,19 @@ public class BoardManager : MonoBehaviour {
 		FinishGame ();
 	}
 
-	private bool IsDraw(int[][] board)
+	public static int CellStateToInt(BoardCell.CellStates state)
 	{
-		return GetEmptyCellCount(board) == 0;
+		switch (state) 
+		{
+		case BoardCell.CellStates.empty:
+			return EMPTY_CELL;
+		case BoardCell.CellStates.O:
+			return O_CELL;
+		case BoardCell.CellStates.X:
+			return X_CELL;
+		default:
+			return -1;
+		}
 	}
 
-	private int GetEmptyCellCount(int[][] board)
-	{
-		return board
-			.SelectMany (ary => ary)
-			.ToList()
-			.FindAll (i => i == EMPTY_CELL)
-			.Count ();
-	}
 }
