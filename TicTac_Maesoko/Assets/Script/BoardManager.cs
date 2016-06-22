@@ -78,19 +78,19 @@ public class BoardManager : MonoBehaviour {
 
 	public int[][] GetBoardAsInts()
 	{
-		int[][] cells = new int[BOARD_HEIGHT][];
+		int[][] board = new int[BOARD_HEIGHT][];
 		int cellCount = 0;
 
-		for (int i = 0; i < cells.Length; i++)
+		for (int i = 0; i < board.Length; i++)
 		{
-			cells[i] = new int[BOARD_WIDTH];
-			for (int j = 0; j < cells[i].Length; j++) 
+			board[i] = new int[BOARD_WIDTH];
+			for (int j = 0; j < board[i].Length; j++) 
 			{
-				cells [i][j] = CellStateToInt(boardCells [cellCount++].CellState);
+				board [i][j] = CellStateToInt(boardCells [cellCount++].CellState);
 			}
 		}
 
-		return cells;
+		return board;
 	}
 
 	public void Judge(BoardCell.CellStates target)
