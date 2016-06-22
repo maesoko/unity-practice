@@ -106,7 +106,7 @@ public class BoardManager : MonoBehaviour {
 		int[][] board = GetBoardAsInts ();
 
 		if (JudgeHorizon(target, board) || JudgeVertical(target, board) ||
-			JudgeLeftAngle(target, board) || JudgeRightAngle(target, board))
+			JudgeOblique(target, board))
 		{
 			ShowWinner ();
 		}
@@ -141,6 +141,11 @@ public class BoardManager : MonoBehaviour {
 		}
 
 		return false;
+	}
+
+	private bool JudgeOblique(BoardCell.CellStates target, int[][] board)
+	{
+		return JudgeLeftAngle (target, board) || JudgeRightAngle (target, board);
 	}
 
 	private bool JudgeLeftAngle(BoardCell.CellStates target, int[][] board)
