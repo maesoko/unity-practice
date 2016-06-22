@@ -6,7 +6,9 @@ public class JudgeManager {
 
 	public bool Judge(BoardCell.CellStates target, int[][] board)
 	{
-		return JudgeHorizon (target, board) || JudgeVertical (target, board) ||	JudgeOblique (target, board);
+		return JudgeHorizon (target, board) ||
+			JudgeVertical (target, board) ||
+			JudgeOblique (target, board);
 	}
 
 	public bool IsDraw(int[][] board)
